@@ -339,16 +339,17 @@ void dispenseFood() {
 
   int portions = feedingAmount[currentAmountIndex];
   int delayS = 0;
+  int rotationCount = 0;
 
   switch (portions) {
     case 1:
-      delayS = 500;
+      rotationCount = 1;
       break;
     case 2:
-      delayS = 1000;
+      rotationCount = 2;
       break;
     case 3:
-      delayS = 1500;
+      rotationCount = 3;
       break;
     default:
       lcd.clear();
@@ -358,16 +359,12 @@ void dispenseFood() {
       return;
   }
 
-  Serial.print("Dispensing ");
-  Serial.print(portions);
-  Serial.print(" portions with delay of ");
-  Serial.print(delayS);
-  Serial.println(" milliseconds");
-
-  servo_test.write(45);
-  delay(delayS);
-  servo_test.write(0);
-  delay(1000);
+  for (int i = 0; i < rotationCount; i++) {
+    servo_test.write(90); 
+    delay(500);
+    servo_test.write(0); 
+    delay(500);
+  }
 
   feed = false;
 }
