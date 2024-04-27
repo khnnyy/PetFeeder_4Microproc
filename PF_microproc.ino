@@ -46,7 +46,7 @@ void loop() {
   if (key == 'A') {
     Serial.println(key);
     setFeedingTime();
-  } else if (key == 'B') {
+  } else if (key == 'C') {
     Serial.println(key);
     viewFeeding();
   } else if (key == 'D') {
@@ -83,6 +83,8 @@ void setFeedingTime() {
       } else if (key == 'A') {
         setFeedingAmount(currentFeedingIndex);  
         break;
+      } else if (key == 'B'){
+        break;
       }
     }
     delay(200); 
@@ -91,6 +93,7 @@ void setFeedingTime() {
 
 void setFeedingTimeForMeal(int mealIndex) {
   while (true) {
+    key = kpd.getKey();
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print(mealNames[mealIndex]);
@@ -101,7 +104,6 @@ void setFeedingTimeForMeal(int mealIndex) {
     int hour = 0;
     int minute = 0;
     int j = 0;
-
     while (true) {
       key = kpd.getKey();
   
@@ -124,6 +126,9 @@ void setFeedingTimeForMeal(int mealIndex) {
         lcd.setCursor(4, 1); 
         lcd.noCursor(); 
       }
+      } else if (key == 'B'){
+        lcd.clear();
+        return;
       }
       }
       if (key == 'A') {
@@ -188,6 +193,9 @@ void setFeedingAmount(int amountIndex) {
       } else if (key == 'A') {
         setFeedingTimeForMeal(amountIndex);
         return; 
+      } else if (key == 'B') {
+        lcd.clear();
+        break;
       }
     }
   }
@@ -223,9 +231,8 @@ void viewFeeding() {
 
     key = kpd.getKey();
 
-    if (key == 'A') {
-      lcd.clear();
-      delay(100);  
+    if (key == 'B') {
+      lcd.clear(); 
       break;     
     } else if (key == '*') {
       currentIndex = (currentIndex + 3) % 4;  
@@ -304,14 +311,14 @@ void manualfeed() {
 
   while (true) {
     key = kpd.getKey();
-    if (key == 'B') {
+    if (key == 'D') {
       if (!isDispensing) {
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Toggle D!=^._.^=");
         lcd.setCursor(0, 1);
         lcd.print("Dispensing...");
-        servo_test.write(45);
+        servo_test.write(90);
         delay(1);         
         isDispensing = true; 
       } else {
@@ -324,7 +331,7 @@ void manualfeed() {
         delay(1);          
         isDispensing = false;  
       }
-    } else if (key == 'A') {
+    } else if (key == 'B') {
       lcd.clear();
       break;
     }
@@ -363,11 +370,12 @@ void dispenseFood() {
     servo_test.write(90); 
     delay(500);
     servo_test.write(0); 
-    delay(500);
+    delay(500); 
   }
 
   feed = false;
 }
+
 
 void displayDateTime() {
   lcd.setCursor(0, 0);
